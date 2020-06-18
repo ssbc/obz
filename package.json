@@ -2,10 +2,10 @@
   "name": "obz",
   "description": "simple and lightweight observer",
   "version": "1.0.0",
-  "homepage": "https://github.com/dominictarr/obv",
+  "homepage": "https://github.com/ssbc/obz",
   "repository": {
     "type": "git",
-    "url": "git://github.com/dominictarr/obv.git"
+    "url": "git://github.com/ssbc/obz.git"
   },
   "dependencies": {},
   "devDependencies": {
