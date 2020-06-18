@@ -163,6 +163,35 @@ module.exports = function (observable) {
     t.equal(fired, 2)
     t.end()
   })
+
+  tape('bug', (t) => {
+    t.plan(1)
+    var o = observable()
+
+    var a = o(() => {})
+
+    o(() => {
+      // This removes the previous listener, which changes the number of
+      // listeners.
+      a()
+    })
+
+
+    o(() => {
+      // `listeners.length` started at 3, but when the above listener removes
+      // it reduces the listener count to 2. When Obv tries to run the third
+      // listener (this one), it tries `listeners[2](value)`, which throws an
+      // error because this listener now has an index of `1`.
+    })
+
+    try {
+      o.set(42)
+      t.pass('did not throw!')
+    } catch (e) {
+      t.fail(e)
+    }
+  })
+
 }
 
 if(!module.parent) module.exports (require('../'))

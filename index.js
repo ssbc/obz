@@ -5,8 +5,11 @@ module.exports = function (filter) {
     value = _value
     var length = listeners.length
     for(var i = 0; i< length && value === _value; i++) {
-      var listener = listeners[i](value)
+      if (typeof listeners[i] === 'function') {
+        listeners[i](value)
+      }
       //if we remove a listener, must decrement i also
+
     }
     // decrement from length, incase a !immediately
     // listener is added during a trigger
