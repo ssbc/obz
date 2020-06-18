@@ -1,7 +1,7 @@
 {
-  "name": "obv",
+  "name": "obz",
   "description": "simple and lightweight observer",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "homepage": "https://github.com/dominictarr/obv",
   "repository": {
     "type": "git",

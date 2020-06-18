@@ -1,4 +1,6 @@
-# obv
+# obz
+
+A fork of https://github.com/dominictarr/obv
 
 Represents a value changing in time.
 
