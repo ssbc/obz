@@ -5,15 +5,13 @@ module.exports = function (filter) {
     value = _value
     var length = listeners.length
     for (var i = 0; i < length && value === _value; i++) {
-      if (typeof listeners[i] === 'function') {
-        const listener = listeners[i]
-        listener(value)
-        if (listeners.length !== length) { // remove
-          length = listeners.length
-          if (listener !== listeners[i]) {
-            // we removed an earlier listener, must decrement i also
-            i -= 1
-          }
+      const listener = listeners[i]
+      listener(value)
+      if (listeners.length !== length) { // remove
+        length = listeners.length
+        if (listener !== listeners[i]) {
+          // we removed an earlier listener, must decrement i also
+          i -= 1
         }
       }
     }
