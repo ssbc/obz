@@ -29,7 +29,6 @@ module.exports = function (observable) {
   })
 
   tape('set value before listener', function (t) {
-
     var o = observable()
 
     var value = Math.random(),  checked = 0
@@ -78,7 +77,6 @@ module.exports = function (observable) {
   })
 
   tape('flatten recursion', function (t) {
-
     var o = observable()
 
     var value = Math.random(),  checked = 1, checking = false
@@ -141,11 +139,9 @@ module.exports = function (observable) {
     t.equal(fired, 3)
 
     t.end()
-
   })
 
   tape('once, !immediately, inside trigger', function (t) {
-
     var o = observable()
     var fired = 0
     o.once(function (v) {
