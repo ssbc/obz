@@ -29,7 +29,6 @@ module.exports = function (observable) {
   })
 
   tape('set value before listener', function (t) {
-
     var o = observable()
 
     var value = Math.random(),  checked = 0
@@ -78,7 +77,6 @@ module.exports = function (observable) {
   })
 
   tape('flatten recursion', function (t) {
-
     var o = observable()
 
     var value = Math.random(),  checked = 1, checking = false
@@ -141,11 +139,9 @@ module.exports = function (observable) {
     t.equal(fired, 3)
 
     t.end()
-
   })
 
   tape('once, !immediately, inside trigger', function (t) {
-
     var o = observable()
     var fired = 0
     o.once(function (v) {
@@ -165,12 +161,15 @@ module.exports = function (observable) {
   })
 
   tape('bug', (t) => {
-    t.plan(1)
+    t.plan(4)
     var o = observable()
 
-    var a = o(() => {})
+    var a = o(() => {
+      t.pass("first was called")
+    })
 
     o(() => {
+      t.pass("second was called")
       // This removes the previous listener, which changes the number of
       // listeners.
       a()
@@ -178,6 +177,7 @@ module.exports = function (observable) {
 
 
     o(() => {
+      t.pass("third was called")
       // `listeners.length` started at 3, but when the above listener removes
       // it reduces the listener count to 2. When Obv tries to run the third
       // listener (this one), it tries `listeners[2](value)`, which throws an
