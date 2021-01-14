@@ -1,7 +1,7 @@
 {
   "name": "obz",
   "description": "simple and lightweight observer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://github.com/ssbc/obz",
   "repository": {
     "type": "git",
