@@ -1,13 +1,16 @@
-module.exports = function (filter) {
-  var value = null, listeners = [], oncers = []
+module.exports = function Obz(filter) {
+  let value = null
+  const listeners = []
+  let oncers = []
 
-  function trigger (_value) {
-    value = _value
-    var length = listeners.length
-    for (var i = 0; i < length && value === _value; i++) {
+  function trigger(nextValue) {
+    value = nextValue
+    let length = listeners.length
+    for (let i = 0; i < length && value === nextValue; i++) {
       const listener = listeners[i]
       listener(value)
-      if (listeners.length !== length) { // remove
+      if (listeners.length !== length) {
+        // something was removed
         length = listeners.length
         if (listener !== listeners[i]) {
           // we removed an earlier listener, must decrement i also
@@ -15,45 +18,45 @@ module.exports = function (filter) {
         }
       }
     }
-    // decrement from length, incase a !immediately
+    // decrement from length, in case an immediately
     // listener is added during a trigger
-    var l = oncers.length
-    var _oncers = oncers
+    let oncersLen = oncers.length
+    const oldOncers = oncers
     oncers = []
-    while (l-- && _value === value) {
-      _oncers.shift()(value)
+    while (oncersLen-- && nextValue === value) {
+      oldOncers.shift()(value)
     }
   }
 
-  function many (ready, immediately) {
-    var i = listeners.push(ready) - 1
-    if (value !== null && immediately !== false) ready(value)
-    return function () { //manually remove...
-      //fast path, will happen if an earlier listener has not been removed.
-      if (listeners[i] !== ready)
-        i = listeners.indexOf(ready)
+  function obz(listener, immediately) {
+    let i = listeners.push(listener) - 1
+    if (value !== null && immediately !== false) listener(value)
+    return function remove() {
+      // manually remove...
+      // fast path, will happen if an earlier listener has not been removed.
+      if (listeners[i] !== listener) i = listeners.indexOf(listener)
       listeners.splice(i, 1)
     }
   }
 
-  many.set = function (_value) {
-    if (filter ? filter(value, _value) : true) trigger(many.value = _value)
-    return many
+  obz.set = function set(nextValue) {
+    if (filter ? filter(value, nextValue) : true) {
+      trigger((obz.value = nextValue))
+    }
+    return obz
   }
 
-  many.once = function (once, immediately) {
-    if(value !== null && immediately !== false) {
-      once(value)
-      return function () {}
-    }
-    else {
-      var i = oncers.push(once) - 1
-      return function () {
-        if(oncers[i] !== once)
-          i = oncers.indexOf(once)
+  obz.once = function once(oncer, immediately) {
+    if (value !== null && immediately !== false) {
+      oncer(value)
+      return function noop() {}
+    } else {
+      const i = oncers.push(oncer) - 1
+      return function remove() {
+        if (oncers[i] !== oncer) i = oncers.indexOf(oncer)
       }
     }
   }
 
-  return many
+  return obz
 }
