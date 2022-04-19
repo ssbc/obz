@@ -25,6 +25,9 @@ register `listener` with the observable. `immediate` is true by default.
 
 A function `remove` is returned, calling this function deregisters the listener.
 
+Another way of deregistering the listener is by returning `false` from inside the
+listener function.
+
 ## observable.set(value=any)
 
 set the current value of this observable. Any registered listeners will be called.

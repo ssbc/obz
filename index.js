@@ -8,7 +8,11 @@ module.exports = function Obz(filter) {
     let length = listeners.length
     for (let i = 0; i < length && value === nextValue; i++) {
       const listener = listeners[i]
-      listener(value)
+      if (listener(value) === false) {
+        listeners.splice(i, 1)
+        i--
+        length--
+      }
       if (listeners.length !== length) {
         // something was removed
         length = listeners.length
@@ -30,13 +34,19 @@ module.exports = function Obz(filter) {
 
   function obz(listener, immediately) {
     let i = listeners.push(listener) - 1
-    if (value !== null && immediately !== false) listener(value)
-    return function remove() {
+    if (value !== null && immediately !== false) {
+      if (listener(value) === false) {
+        remove()
+        return function noop() {}
+      }
+    }
+    function remove() {
       // manually remove...
       // fast path, will happen if an earlier listener has not been removed.
       if (listeners[i] !== listener) i = listeners.indexOf(listener)
-      listeners.splice(i, 1)
+      if (i >= 0) listeners.splice(i, 1)
     }
+    return remove
   }
 
   obz.set = function set(nextValue) {

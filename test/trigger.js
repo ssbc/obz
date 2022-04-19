@@ -76,6 +76,63 @@ module.exports = function (observable) {
     t.end()
   })
 
+  tape('remove itself, simple', function (t) {
+    var o = observable()
+    t.plan(1)
+
+    o(function (val) {
+      t.equals(val, 10)
+      return false
+    })
+
+    o.set(10)
+
+    o.set(20)
+
+    t.end()
+  })
+
+
+  tape('remove itself, complex', function (t) {
+    var o = observable()
+    t.plan(5)
+
+    var remove = o(function (val) {
+      t.equals(val, 10)
+      return false
+    })
+
+    const expected = [10, 20]
+    // 2nd listener remains functional after 1st listener is removed
+    o(function (val) {
+      t.true(expected.length > 0)
+      t.equals(val, expected.shift())
+    })
+
+    o.set(10)
+
+    remove() // should do nothing
+
+    o.set(20)
+
+    t.end()
+  })
+
+  tape('remove itself (immediately)', function (t) {
+    var o = observable()
+
+    o.set(10)
+
+    o(function (val) {
+      t.equals(val, 10)
+      return false
+    }, true)
+
+    o.set(20)
+
+    t.end()
+  })
+
   tape('flatten recursion', function (t) {
     var o = observable()
 
