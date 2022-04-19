@@ -1,5 +1,5 @@
 module.exports = function Obz(filter) {
-  var value = null
+  let value = null
   const listeners = []
   let oncers = []
 
@@ -51,7 +51,7 @@ module.exports = function Obz(filter) {
       oncer(value)
       return function noop() {}
     } else {
-      var i = oncers.push(oncer) - 1
+      const i = oncers.push(oncer) - 1
       return function remove() {
         if (oncers[i] !== oncer) i = oncers.indexOf(oncer)
       }
