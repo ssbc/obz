@@ -8,11 +8,10 @@
     "url": "git://github.com/ssbc/obz.git"
   },
   "devDependencies": {
-    "tap-arc": "^1.0.1",
     "tape": "^5.7.0"
   },
   "scripts": {
-    "test": "tape test/*.js | tap-arc"
+    "test": "tape test/*.js"
   },
   "author": "'Dominic Tarr' <dominic.tarr@gmail.com> (dominictarr.com)",
   "license": "MIT"
