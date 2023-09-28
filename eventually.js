@@ -15,10 +15,12 @@ module.exports = function (filter) {
   }
 
   function eventually (ready) {
-    if (value != null) { ready(value) } else if (!listener) { listener = ready } else if (!listeners.length) {
+    if (value != null) ready(value)
+    else if (!listener) listener = ready
+    else if (!listeners.length) {
       listeners = [listener, ready]
       listener = null
-    } else { listeners.push(ready) }
+    } else listeners.push(ready)
   }
 
   eventually.set = function (_value) {
