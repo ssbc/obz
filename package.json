@@ -7,11 +7,14 @@
     "type": "git",
     "url": "git://github.com/ssbc/obz.git"
   },
-  "devDependencies": {
-    "tape": "^5.7.0"
-  },
   "scripts": {
-    "test": "tape test/*.js"
+    "test": "npm run test:js && npm run lint",
+    "test:js": "tape test/*.js",
+    "lint": "standard --fix"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0",
+    "tape": "^5.7.0"
   },
   "author": "'Dominic Tarr' <dominic.tarr@gmail.com> (dominictarr.com)",
   "license": "MIT"

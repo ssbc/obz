@@ -1,12 +1,12 @@
-module.exports = function Obz(filter) {
+module.exports = function Obz (filter) {
   let value = null
   const listeners = []
   let oncers = []
 
-  function trigger(nextValue) {
+  function trigger (nextValue) {
     value = nextValue
     let length = listeners.length
-    for (let i = 0; i < length && value === nextValue; i++) {
+    for (let i = 0; i < length && value === nextValue; i++) { // eslint-disable-line
       const listener = listeners[i]
       if (listener(value) === false) {
         listeners.splice(i, 1)
@@ -27,20 +27,20 @@ module.exports = function Obz(filter) {
     let oncersLen = oncers.length
     const oldOncers = oncers
     oncers = []
-    while (oncersLen-- && nextValue === value) {
+    while (oncersLen-- && nextValue === value) { // eslint-disable-line
       oldOncers.shift()(value)
     }
   }
 
-  function obz(listener, immediately) {
+  function obz (listener, immediately) {
     let i = listeners.push(listener) - 1
     if (value !== null && immediately !== false) {
       if (listener(value) === false) {
         remove()
-        return function noop() {}
+        return function noop () {}
       }
     }
-    function remove() {
+    function remove () {
       // manually remove...
       // fast path, will happen if an earlier listener has not been removed.
       if (listeners[i] !== listener) i = listeners.indexOf(listener)
@@ -49,20 +49,20 @@ module.exports = function Obz(filter) {
     return remove
   }
 
-  obz.set = function set(nextValue) {
+  obz.set = function set (nextValue) {
     if (filter ? filter(value, nextValue) : true) {
       trigger((obz.value = nextValue))
     }
     return obz
   }
 
-  obz.once = function once(oncer, immediately) {
+  obz.once = function once (oncer, immediately) {
     if (value !== null && immediately !== false) {
       oncer(value)
-      return function noop() {}
+      return function noop () {}
     } else {
       let i = oncers.push(oncer) - 1
-      return function remove() {
+      return function remove () {
         if (oncers[i] !== oncer) i = oncers.indexOf(oncer)
         if (i >= 0) oncers.splice(i, 1)
       }

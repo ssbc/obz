@@ -1,24 +1,23 @@
-var tape = require('tape')
+const tape = require('tape')
 
 module.exports = function (observable) {
-
   tape('once', function (t) {
-    var o = observable()
-    var fired = 0
+    const o = observable()
+    let fired = 0
     o.once(function (v) {
-      fired ++
+      fired++
       t.equal(v, 1)
     })
 
     o.set(1)
 
     o.once(function (v) {
-      fired ++
+      fired++
       t.equal(v, 2)
     }, false)
 
     o.once(function (v) {
-      fired ++
+      fired++
       t.equal(v, 1)
     })
 
@@ -33,13 +32,13 @@ module.exports = function (observable) {
   })
 
   tape('once, !immediately, inside trigger', function (t) {
-    var o = observable()
-    var fired = 0
+    const o = observable()
+    let fired = 0
     o.once(function (v) {
       t.equal(v, 1)
-      fired ++
+      fired++
       o.once(function (v) {
-        fired ++
+        fired++
         t.equal(v, 2)
       }, false)
     })
@@ -63,11 +62,9 @@ module.exports = function (observable) {
 
     t.end()
   })
-
 }
 
-if(
+if (
   !module.parent ||
   module.parent.path.endsWith('node_modules/tape/bin')
 ) module.exports(require('../'))
-

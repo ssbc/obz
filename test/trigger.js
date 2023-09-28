@@ -1,12 +1,11 @@
-var tape = require('tape')
+const tape = require('tape')
 
 module.exports = function (observable) {
-
   tape('set listener and trigger', function (t) {
-    var o = observable()
-    var value = Math.random(), checked = 0
-    var rm = o(function (_value) {
-      checked ++
+    const o = observable()
+    const value = Math.random(); let checked = 0
+    const rm = o(function (_value) {
+      checked++
       t.equal(_value, value)
     })
 
@@ -29,15 +28,15 @@ module.exports = function (observable) {
   })
 
   tape('set value before listener', function (t) {
-    var o = observable()
+    const o = observable()
 
-    var value = Math.random(),  checked = 0
+    const value = Math.random(); let checked = 0
 
     o.set(value)
 
-    var rm = o(function (_value) {
+    const rm = o(function (_value) {
       t.equal(_value, value)
-      checked ++
+      checked++
     })
 
     t.equal(checked, 1)
@@ -53,19 +52,19 @@ module.exports = function (observable) {
 
     t.equal(checked, 2)
     t.end()
-
   })
 
   tape('add listener within trigger', function (t) {
-    var o = observable()
+    const o = observable()
 
-    var value = Math.random(),  checked = 0, checking = false
+    const value = Math.random()
+    let checked = 0
 
     o(function (_value) {
-      checked ++
+      checked++
       t.equal(_value, value)
       o(function (_value) {
-        checked ++
+        checked++
         t.equal(_value, value)
       })
       t.equal(checked, 2)
@@ -77,7 +76,7 @@ module.exports = function (observable) {
   })
 
   tape('remove itself, simple', function (t) {
-    var o = observable()
+    const o = observable()
     t.plan(1)
 
     o(function (val) {
@@ -92,12 +91,11 @@ module.exports = function (observable) {
     t.end()
   })
 
-
   tape('remove itself, complex', function (t) {
-    var o = observable()
+    const o = observable()
     t.plan(5)
 
-    var remove = o(function (val) {
+    const remove = o(function (val) {
       t.equals(val, 10)
       return false
     })
@@ -119,7 +117,7 @@ module.exports = function (observable) {
   })
 
   tape('remove itself (immediately)', function (t) {
-    var o = observable()
+    const o = observable()
 
     o.set(10)
 
@@ -134,32 +132,27 @@ module.exports = function (observable) {
   })
 
   tape('flatten recursion', function (t) {
-    var o = observable()
+    const o = observable()
 
-    var value = Math.random(),  checked = 1, checking = false
+    let checked = 1
 
     function recurse () {
-      checking = true
-      checked ++
-      if(checked < 3)
-        o.set(checked)
-      checking = false
+      checked++
+      if (checked < 3) { o.set(checked) }
     }
 
-    var last, last2
+    let last, last2
     o(function (v) {
       console.log(last, v)
-      if(last) t.ok(v > last, 'monotonic increasing listeners')
+      if (last) t.ok(v > last, 'monotonic increasing listeners')
       last = v
     })
     o(recurse)
     o(function (v) {
       console.log(last2, v)
-      if(last2) t.ok(v > last2, 'monotonic increasing listeners')
+      if (last2) t.ok(v > last2, 'monotonic increasing listeners')
       last2 = v
     })
-
-
 
     o.set(checked)
 
@@ -169,22 +162,21 @@ module.exports = function (observable) {
 
   tape('bug', (t) => {
     t.plan(4)
-    var o = observable()
+    const o = observable()
 
-    var a = o(() => {
-      t.pass("first was called")
+    const a = o(() => {
+      t.pass('first was called')
     })
 
     o(() => {
-      t.pass("second was called")
+      t.pass('second was called')
       // This removes the previous listener, which changes the number of
       // listeners.
       a()
     })
 
-
     o(() => {
-      t.pass("third was called")
+      t.pass('third was called')
       // `listeners.length` started at 3, but when the above listener removes
       // it reduces the listener count to 2. When Obv tries to run the third
       // listener (this one), it tries `listeners[2](value)`, which throws an
@@ -198,11 +190,9 @@ module.exports = function (observable) {
       t.fail(e)
     }
   })
-
 }
 
-if(
+if (
   !module.parent ||
   module.parent.path.endsWith('node_modules/tape/bin')
 ) module.exports(require('../'))
-
