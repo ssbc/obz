@@ -61,9 +61,10 @@ module.exports = function Obz(filter) {
       oncer(value)
       return function noop() {}
     } else {
-      const i = oncers.push(oncer) - 1
+      let i = oncers.push(oncer) - 1
       return function remove() {
         if (oncers[i] !== oncer) i = oncers.indexOf(oncer)
+        if (i >= 0) oncers.splice(i, 1)
       }
     }
   }
