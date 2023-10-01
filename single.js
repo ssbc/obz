@@ -1,22 +1,21 @@
-
 function noop () {}
 
 module.exports = function (filter) {
-  var value
+  let value
+  let listener
   function observer (ready) {
-    if(value)
-      if(ready(value)) return noop
-    else
-      listener = ready
+    if (value) {
+      if (ready(value)) return noop
+      else { listener = ready }
+    }
     return function () {
-      if(listener === ready) listener = null
+      if (listener === ready) listener = null
     }
   }
 
-  observer.set = function (value) {
-    if(filter(value, _value)) {
-      if(listener) listener(value = _value)
+  observer.set = function (_value) {
+    if (filter(value, _value)) {
+      if (listener) listener(value = _value)
     }
   }
 }
-
